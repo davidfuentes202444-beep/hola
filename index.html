@@ -1,201 +1,801 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Free Fire Clone</title>
-    <style>
-        body { margin: 0; overflow: hidden; font-family: 'Arial', sans-serif; }
-        #ui {
-            position: absolute; bottom: 20px; left: 20px; color: white;
-            text-shadow: 2px 2px 4px #000; pointer-events: none;
-        }
-        #crosshair {
-            position: absolute; top: 50%; left: 50%;
-            width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.5);
-            border-radius: 50%; transform: translate(-50%, -50%);
-        }
-        #health-bar {
-            width: 200px; height: 10px; background: rgba(0,0,0,0.5);
-            border: 2px solid white; margin-top: 5px;
-        }
-        #health-inner { width: 100%; height: 100%; background: #4CAF50; transition: 0.3s; }
-        .instructions { position: absolute; top: 10px; right: 10px; color: #fff; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 5px; font-size: 12px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Negación en Francés - Pizarra</title>
+  <style>
+    :root {
+      --bg: #0b1320;
+      --panel: rgba(15, 23, 42, 0.94);
+      --accent: #f5c518;
+      --accent-2: #ff7a18;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      font-family: "Segoe UI", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, rgba(255, 215, 0, 0.12), transparent 35%), linear-gradient(180deg, #0b1320 0%, #0f172a 100%);
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .app {
+      width: min(1400px, 100%);
+      min-height: 840px;
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(11, 19, 32, 0.95), rgba(15, 23, 42, 0.98));
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      height: 100%;
+    }
+
+    .screen {
+      padding: 48px 56px;
+      display: grid;
+      gap: 36px;
+      align-items: start;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0;
+      line-height: 1.15;
+      color: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(3rem, 5vw, 4.8rem);
+      text-align: center;
+      text-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    }
+
+    h2 {
+      font-size: clamp(2rem, 3vw, 3rem);
+      text-align: center;
+    }
+
+    p {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-size: 1.15rem;
+      text-align: center;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 38px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      max-width: 330px;
+    }
+
+    .field label {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .field input[type="number"], .field input[type="text"] {
+      width: 100%;
+      border: none;
+      outline: none;
+      border-radius: 14px;
+      padding: 18px 20px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font-size: 1.05rem;
+      text-align: center;
+    }
+
+    .field input[type="text"]::placeholder {
+      color: var(--text-muted);
+    }
+
+    .button {
+      width: fit-content;
+      min-width: 240px;
+      border: none;
+      border-radius: 20px;
+      padding: 22px 34px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
+      color: var(--bg);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 16px 36px rgba(255, 193, 7, 0.26);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .button:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 42px rgba(255, 193, 7, 0.32);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .button:disabled {
+      opacity: 0.42;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .sidebar {
+      padding: 42px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+      border-left: 2px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .sidebar h2 {
+      font-size: 2rem;
+      text-align: center;
+    }
+
+    .leaderboard {
+      display: grid;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .leaderboard-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 1rem;
+    }
+
+    .leaderboard-item strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .leaderboard-item span {
+      color: var(--accent);
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .player-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: rgba(245, 197, 24, 0.12);
+      border: 2px solid var(--accent);
+      border-radius: 999px;
+      padding: 24px 36px;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: clamp(1.25rem, 2vw, 1.9rem);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .phrase-card {
+      display: grid;
+      gap: 26px;
+      padding: 44px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      min-height: 520px;
+      align-items: center;
+    }
+
+    .phrase-main {
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      letter-spacing: 0.03em;
+      line-height: 1.05;
+      text-align: center;
+      color: var(--text);
+      font-weight: 900;
+      text-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .blank {
+      color: var(--accent);
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .hint {
+      color: var(--text-muted);
+      font-size: 1.25rem;
+      text-align: center;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .reveal-panel {
+      display: grid;
+      gap: 22px;
+      width: 100%;
+      justify-items: center;
+    }
+
+    .answer-box {
+      width: 100%;
+      max-width: 860px;
+      padding: 32px;
+      border-radius: 24px;
+      background: rgba(9, 15, 30, 0.92);
+      border: 2px dashed rgba(255, 255, 255, 0.12);
+      text-align: center;
+      display: grid;
+      gap: 16px;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .answer-box.hidden {
+      display: none;
+      opacity: 0;
+      visibility: hidden;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .answer-title {
+      font-size: 0.95rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .answer-text {
+      color: var(--text);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .pronunciation-text {
+      color: #9ee7ff;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      width: 100%;
+      max-width: 980px;
+    }
+
+    .buttons-grid button {
+      min-height: 120px;
+      border-radius: 22px;
+      font-size: 1.25rem;
+      letter-spacing: 0.02em;
+      box-shadow: 0 14px 34px rgba(0,0,0,0.25);
+      border: none;
+      cursor: pointer;
+      color: white;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+
+    .buttons-grid button:hover:not(:disabled) {
+      transform: translateY(-3px);
+    }
+
+    .reveal-button {
+      grid-column: span 3;
+      background: linear-gradient(135deg, #4f46e5, #22d3ee);
+      color: white;
+    }
+
+    .correct {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    .incorrect {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+    }
+
+    .next-button {
+      grid-column: span 3;
+      background: linear-gradient(135deg, #f97316, #fb7185);
+    }
+
+    .feedback {
+      display: none;
+      padding: 18px 24px;
+      border-radius: 18px;
+      border: 1px solid rgba(245, 197, 24, 0.3);
+      background: rgba(245, 197, 24, 0.1);
+      color: var(--accent);
+      font-size: 1.2rem;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .info-panel {
+      width: 100%;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 24px 28px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .podium {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .podium-card {
+      position: relative;
+      border-radius: 26px;
+      padding: 32px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      text-align: center;
+      display: grid;
+      gap: 20px;
+      min-height: 280px;
+    }
+
+    .podium-card strong {
+      font-size: 3rem;
+      color: var(--accent);
+      line-height: 1.05;
+    }
+
+    .podium-card span {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .podium-card .medal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .confetti {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      opacity: 0.95;
+      border-radius: 4px;
+      animation: fall 3.2s ease-in infinite;
+    }
+
+    @media (max-width: 1160px) {
+      .grid { grid-template-columns: 1fr; }
+      .sidebar { border-left: none; border-top: 2px solid rgba(255,255,255,0.1); }
+      .podium { grid-template-columns: 1fr; }
+      .screen { padding: 30px 28px; }
+      .phrase-card { padding: 28px; }
+      .buttons-grid { grid-template-columns: 1fr; }
+      .buttons-grid button { min-height: 100px; }
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(820px) rotate(360deg); opacity: 0; }
+    }
+  </style>
 </head>
 <body>
+  <div class="app">
+    <div class="grid">
+      <section class="screen" id="screen">
+        <div class="card" id="startScreen" style="display: flex;">
+          <div>
+            <h1>Negación en Francés</h1>
+            <p>Juego de pizarra. Configura 1 a 4 jugadores. Algunos retos son traducciones al francés, otros rellenar huecos en frases francesas.</p>
+          </div>
+          <div class="field">
+            <label for="playerCount">Número de jugadores</label>
+            <input id="playerCount" type="number" min="1" max="4" value="2" />
+          </div>
+          <div id="namesContainer"></div>
+          <button class="button" id="startButton">Iniciar Juego</button>
+          <div class="info-panel">
+            <strong>Instrucciones clave:</strong>
+            <ul style="margin: 14px 0 0 18px; padding: 0; color: var(--text-muted);">
+                <li>En cada turno se muestra la frase en español (traducción) o en francés con huecos (rellenar).</li>
+                <li>El alumno escribe la traducción o las palabras faltantes con marcador sobre la pizarra.</li>
+                <li>Presiona "Revelar partes de la oración" solo cuando el alumno haya terminado.</li>
+                <li>Para traducciones, las partes se muestran separadas con etiquetas (sujeto), (verbo), etc.</li>
+                <li>Para huecos, se muestran las palabras correctas para rellenar.</li>
+              <li>Después de comparar, selecciona CORRECTO o INCORRECTO.</li>
+            </ul>
+          </div>
+        </div>
 
-<div id="crosshair"></div>
-<div id="ui">
-    <div style="font-size: 24px; font-weight: bold;">JUGADOR</div>
-    <div id="health-bar"><div id="health-inner"></div></div>
-    <p>Kills: <span id="kills">0</span> | Loot: <span id="loot">0</span></p>
-</div>
-<div class="instructions">
-    WASD: Mover | CLICK: Disparar | E: Agarrar | ESPACIO: Saltar
-</div>
+        <div class="card" id="gameScreen" style="display: none;">
+          <div class="player-tag" id="currentTurnTag">Turno de Jugador</div>
+          <div class="phrase-card">
+            <div>
+              <h2>Reto</h2>
+              <p class="hint">Muestra esta frase en grande y deja que el alumno escriba en la pizarra.</p>
+            </div>
+            <div class="phrase-main" id="questionText">No lo sé.</div>
+            <div class="info-panel">
+              <strong>Objetivo:</strong> traduce al francés o rellena los huecos en la frase antes de revelar.
+            </div>
+            <div class="reveal-panel">
+              <button class="button reveal-button" id="revealButton">👁️ Revelar partes de la oración</button>
+              <div class="answer-box hidden" id="answerBox">
+                <div class="answer-title">Respuesta correcta</div>
+                <div class="answer-text" id="answerText"></div>
+                <div class="pronunciation-text" id="pronunciationText"></div>
+              </div>
+            </div>
+            <div class="buttons-grid">
+              <button class="correct" id="correctButton" disabled>¡CORRECTO! 👍</button>
+              <button class="incorrect" id="incorrectButton" disabled>INCORRECTO 👎</button>
+              <button class="button next-button" id="nextTurnButton" disabled>Siguiente Turno</button>
+            </div>
+            <div class="feedback" id="feedback">Puntuación guardada.</div>
+          </div>
+        </div>
 
-<script type="importmap">
-    { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
-</script>
+        <div class="card" id="endScreen" style="display: none;">
+          <div>
+            <h1>¡Juego terminado!</h1>
+            <p>Revisa el podio y celebra los mejores resultados.</p>
+          </div>
+          <div class="podium" id="podium"></div>
+          <button class="button" id="restartButton">Reiniciar Juego</button>
+          <div class="confetti" id="confetti"></div>
+        </div>
+      </section>
 
-<script type="module">
-import * as THREE from 'three';
+      <aside class="sidebar">
+        <div>
+          <h2>Puntuaciones</h2>
+          <p>Actualización en tiempo real para el profesor.</p>
+        </div>
+        <div class="leaderboard" id="leaderboard"></div>
+        <div class="card" style="background: rgba(255,255,255,0.03);">
+          <h3>Consejos de proyección</h3>
+          <ul style="padding-left: 18px; margin: 0; color: var(--text-muted); line-height:1.8; font-size: 1rem;">
+            <li>El texto principal debe ser visible a distancia.</li>
+            <li>Oculta la respuesta hasta que el alumno termine de escribir.</li>
+            <li>Usa marcador grueso para escribir en la pizarra física.</li>
+            <li>Avanza solo después de calificar la respuesta.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
 
-// --- CONFIGURACIÓN DE ESCENA ---
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x87CEEB); // Cielo
-scene.fog = new THREE.Fog(0x87CEEB, 20, 100);
+  <script>
+    const phrases = [
+      { type: 'translation', challenge: 'No lo sé.', answer: 'Je ne sais pas.', parts: ['Je (sujeto)', 'ne', 'sais (verbo)', 'pas'] },
+      { type: 'fill_blanks', challenge: 'Je ___ sais ___.', blanks: ['ne', 'pas'], answer: 'Je ne sais pas.' },
+      { type: 'translation', challenge: 'No es grave / No pasa nada.', answer: "Ce n'est pas grave.", parts: ['Ce (sujeto)', "n'est (verbo)", 'pas', 'grave'] },
+      { type: 'fill_blanks', challenge: "Ce ___ est ___ grave.", blanks: ["n'", 'pas'], answer: "Ce n'est pas grave." },
+      { type: 'translation', challenge: 'No entiendo.', answer: 'Je ne comprends pas.', parts: ['Je (sujeto)', 'ne', 'comprends (verbo)', 'pas'] },
+      { type: 'fill_blanks', challenge: 'Je ___ comprends ___.', blanks: ['ne', 'pas'], answer: 'Je ne comprends pas.' },
+      { type: 'translation', challenge: 'Él no come.', answer: 'Il ne mange pas.', parts: ['Il (sujeto)', 'ne', 'mange (verbo)', 'pas'] },
+      { type: 'fill_blanks', challenge: 'Il ___ mange ___.', blanks: ['ne', 'pas'], answer: 'Il ne mange pas.' },
+      { type: 'translation', challenge: 'A ella no le gusta el café.', answer: "Elle n'aime pas le café.", parts: ['Elle (sujeto)', "n'aime (verbo)", 'pas', 'le café'] },
+      { type: 'fill_blanks', challenge: "Elle ___ aime ___ le café.", blanks: ["n'", 'pas'], answer: "Elle n'aime pas le café." },
+      { type: 'translation', challenge: 'Nosotros no queremos.', answer: 'Nous ne voulons pas.', parts: ['Nous (sujeto)', 'ne', 'voulons (verbo)', 'pas'] },
+      { type: 'fill_blanks', challenge: 'Nous ___ voulons ___.', blanks: ['ne', 'pas'], answer: 'Nous ne voulons pas.' },
+      { type: 'translation', challenge: 'No tengo hambre.', answer: "Je n'ai pas faim.", parts: ['Je (sujeto)', "n'ai (verbo)", 'pas', 'faim'] },
+      { type: 'fill_blanks', challenge: "Je ___ ai ___ faim.", blanks: ["n'", 'pas'], answer: "Je n'ai pas faim." },
+      { type: 'translation', challenge: 'No estás solo.', answer: "Tu n'es pas seul.", parts: ['Tu (sujeto)', "n'es (verbo)", 'pas', 'seul'] },
+      { type: 'fill_blanks', challenge: "Tu ___ es ___ seul.", blanks: ["n'", 'pas'], answer: "Tu n'es pas seul." },
+      { type: 'translation', challenge: 'Ellos no están aquí.', answer: 'Ils ne sont pas ici.', parts: ['Ils (sujeto)', 'ne', 'sont (verbo)', 'pas', 'ici'] },
+      { type: 'fill_blanks', challenge: 'Ils ___ sont ___ ici.', blanks: ['ne', 'pas'], answer: 'Ils ne sont pas ici.' },
+      { type: 'translation', challenge: 'No hace frío.', answer: 'Il ne fait pas froid.', parts: ['Il (sujeto)', 'ne', 'fait (verbo)', 'pas', 'froid'] },
+      { type: 'fill_blanks', challenge: 'Il ___ fait ___ froid.', blanks: ['ne', 'pas'], answer: 'Il ne fait pas froid.' },
+      { type: 'translation', challenge: 'Ella no trabaja.', answer: 'Elle ne travaille pas.', parts: ['Elle (sujeto)', 'ne', 'travaille (verbo)', 'pas'] },
+      { type: 'fill_blanks', challenge: 'Elle ___ travaille ___.', blanks: ['ne', 'pas'], answer: 'Elle ne travaille pas.' },
+      { type: 'translation', challenge: 'No me gusta eso.', answer: "Je n'aime pas ça.", parts: ['Je (sujeto)', "n'aime (verbo)", 'pas', 'ça'] },
+      { type: 'fill_blanks', challenge: "Je ___ aime ___ ça.", blanks: ["n'", 'pas'], answer: "Je n'aime pas ça." },
+      { type: 'translation', challenge: 'No es fácil.', answer: "Ce n'est pas fácil.", parts: ['Ce (sujeto)', "n'est (verbo)", 'pas', 'fácil'] },
+      { type: 'fill_blanks', challenge: "Ce ___ est ___ fácil.", blanks: ["n'", 'pas'], answer: "Ce n'est pas fácil." },
+      { type: 'translation', challenge: 'No tienes razón.', answer: "Tu n'as pas raison.", parts: ['Tu (sujeto)', "n'as (verbo)", 'pas', 'raison'] },
+      { type: 'fill_blanks', challenge: "Tu ___ as ___ raison.", blanks: ["n'", 'pas'], answer: "Tu n'as pas raison." },
+      { type: 'translation', challenge: 'No estamos listos.', answer: 'Nous ne sommes pas prêts.', parts: ['Nous (sujeto)', 'ne', 'sommes (verbo)', 'pas', 'prêts'] },
+      { type: 'fill_blanks', challenge: 'Nous ___ sommes ___ prêts.', blanks: ['ne', 'pas'], answer: 'Nous ne sommes pas prêts.' },
+      { type: 'translation', challenge: 'No hablo francés.', answer: 'Je ne parle pas français.', parts: ['Je (sujeto)', 'ne', 'parle (verbo)', 'pas', 'français'] },
+      { type: 'fill_blanks', challenge: 'Je ___ parle ___ français.', blanks: ['ne', 'pas'], answer: 'Je ne parle pas français.' },
+      { type: 'translation', challenge: 'No está lloviendo.', answer: 'Il ne pleut pas.', parts: ['Il (sujeto)', 'ne', 'pleut (verbo)', 'pas'] },
+      { type: 'fill_blanks', challenge: 'Il ___ pleut ___.', blanks: ['ne', 'pas'], answer: 'Il ne pleut pas.' },
+      { type: 'translation', challenge: 'No estoy durmiendo.', answer: 'Je ne dors pas.', parts: ['Je (sujeto)', 'ne', 'dors (verbo)', 'pas'] },
+      { type: 'fill_blanks', challenge: 'Je ___ dors ___.', blanks: ['ne', 'pas'], answer: 'Je ne dors pas.' },
+      { type: 'translation', challenge: 'Ustedes no tienen tiempo.', answer: "Vous n'avez pas le temps.", parts: ['Vous (sujeto)', "n'avez (verbo)", 'pas', 'le temps'] },
+      { type: 'fill_blanks', challenge: "Vous ___ avez ___ le temps.", blanks: ["n'", 'pas'], answer: "Vous n'avez pas le temps." },
+      { type: 'translation', challenge: 'No es verdad.', answer: 'Ce n\'est pas vrai.', parts: ['Ce (sujeto)', 'n\'est (verbo)', 'pas', 'vrai'] },
+      { type: 'fill_blanks', challenge: 'Ce ___ est ___ vrai.', blanks: ['n\'', 'pas'], answer: 'Ce n\'est pas vrai.' }
+    ];
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.shadowMap.enabled = true;
-document.body.appendChild(renderer.domElement);
+    const playerCountInput = document.getElementById('playerCount');
+    const namesContainer = document.getElementById('namesContainer');
+    const startButton = document.getElementById('startButton');
+    const startScreen = document.getElementById('startScreen');
+    const gameScreen = document.getElementById('gameScreen');
+    const endScreen = document.getElementById('endScreen');
+    const leaderboardEl = document.getElementById('leaderboard');
+    const currentTurnTag = document.getElementById('currentTurnTag');
+    const questionText = document.getElementById('questionText');
+    const answerBox = document.getElementById('answerBox');
+    const answerText = document.getElementById('answerText');
+    const pronunciationText = document.getElementById('pronunciationText');
+    const revealButton = document.getElementById('revealButton');
+    const correctButton = document.getElementById('correctButton');
+    const incorrectButton = document.getElementById('incorrectButton');
+    const nextTurnButton = document.getElementById('nextTurnButton');
+    const feedback = document.getElementById('feedback');
+    const podiumEl = document.getElementById('podium');
+    const restartButton = document.getElementById('restartButton');
+    const confetti = document.getElementById('confetti');
 
-// --- LUCES ---
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(10, 20, 10);
-light.castShadow = true;
-scene.add(light);
-scene.add(new THREE.AmbientLight(0x404040));
+    let players = [];
+    let currentTurn = 0;
+    let totalTurns = 0;
+    let gameDeck = [];
+    let answerRevealed = false;
 
-// --- SUELO (EL MAPA) ---
-const floorGeo = new THREE.PlaneGeometry(200, 200);
-const floorMat = new THREE.MeshPhongMaterial({ color: 0x3d5229 }); // Verde militar
-const floor = new THREE.Mesh(floorGeo, floorMat);
-floor.rotation.x = -Math.PI / 2;
-floor.receiveShadow = true;
-scene.add(floor);
-
-// --- JUGADOR (Mecánica de 3ra Persona) ---
-const playerGroup = new THREE.Group();
-const bodyGeo = new THREE.CapsuleGeometry(0.5, 1, 4, 8);
-const bodyMat = new THREE.MeshPhongMaterial({ color: 0x2244aa });
-const playerMesh = new THREE.Mesh(bodyGeo, bodyMat);
-playerMesh.castShadow = true;
-playerMesh.position.y = 1;
-playerGroup.add(playerMesh);
-scene.add(playerGroup);
-
-// La cámara sigue al jugador
-const cameraOffset = new THREE.Vector3(0, 3, 5);
-
-// --- OBJETOS (CASAS Y LOOT) ---
-function createHouse(x, z) {
-    const house = new THREE.Group();
-    const base = new THREE.Mesh(new THREE.BoxGeometry(5, 4, 5), new THREE.MeshPhongMaterial({color: 0x8b4513}));
-    base.position.y = 2;
-    base.castShadow = true;
-    house.add(base);
-    house.position.set(x, 0, z);
-    scene.add(house);
-    return base;
-}
-const houses = [createHouse(10, -10), createHouse(-15, -20)];
-
-const loots = [];
-function spawnLoot() {
-    const geo = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-    const mat = new THREE.MeshPhongMaterial({color: 0xffd700, emissive: 0x333300});
-    const box = new THREE.Mesh(geo, mat);
-    box.position.set(Math.random()*40-20, 0.5, Math.random()*40-20);
-    scene.add(box);
-    loots.push(box);
-}
-for(let i=0; i<10; i++) spawnLoot();
-
-// --- ENEMIGOS (BOTS) ---
-const enemies = [];
-function spawnEnemy() {
-    const en = new THREE.Mesh(new THREE.CapsuleGeometry(0.5, 1, 4, 8), new THREE.MeshPhongMaterial({color: 0xff0000}));
-    en.position.set(Math.random()*60-30, 1, Math.random()*60-30);
-    scene.add(en);
-    enemies.push({mesh: en, hp: 100});
-}
-for(let i=0; i<5; i++) spawnEnemy();
-
-// --- LÓGICA DE JUEGO ---
-let kills = 0;
-let lootCount = 0;
-const keys = {};
-window.addEventListener('keydown', e => keys[e.code] = true);
-window.addEventListener('keyup', e => keys[e.code] = false);
-
-// Disparo
-window.addEventListener('mousedown', () => {
-    // Simulación de disparo simple
-    const raycaster = new THREE.Raycaster();
-    const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(playerGroup.quaternion);
-    raycaster.set(playerGroup.position, direction);
-    
-    const intersects = raycaster.intersectObjects(enemies.map(e => e.mesh));
-    if(intersects.length > 0) {
-        const hit = enemies.find(e => e.mesh === intersects[0].object);
-        hit.hp -= 50;
-        if(hit.hp <= 0) {
-            scene.remove(hit.mesh);
-            enemies.splice(enemies.indexOf(hit), 1);
-            kills++;
-            document.getElementById('kills').innerText = kills;
-            spawnEnemy(); // Reaparece otro
-        }
+    function shuffle(array) {
+      return array
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
     }
-});
 
-function update() {
-    // Movimiento
-    const speed = 0.15;
-    if(keys['KeyW']) playerGroup.translateZ(-speed);
-    if(keys['KeyS']) playerGroup.translateZ(speed);
-    if(keys['KeyA']) playerGroup.rotation.y += 0.05;
-    if(keys['KeyD']) playerGroup.rotation.y -= 0.05;
-    if(keys['Space'] && playerGroup.position.y <= 0.1) playerGroup.position.y += 2; // Salto simple
+    function createGameDeck() {
+      const rounds = 3;
+      const deckSize = players.length * rounds;
+      const shuffled = shuffle([...phrases]);
+      gameDeck = shuffled.slice(0, deckSize);
+      totalTurns = gameDeck.length;
+    }
 
-    // Gravedad
-    if(playerGroup.position.y > 0) playerGroup.position.y -= 0.05;
+    function createPlayerInputs() {
+      namesContainer.innerHTML = '';
+      const count = Math.max(1, Math.min(4, Number(playerCountInput.value || 1)));
+      for (let i = 1; i <= count; i += 1) {
+        const field = document.createElement('div');
+        field.className = 'field';
+        field.innerHTML = `
+          <label for="player${i}">Jugador ${i}</label>
+          <input id="player${i}" type="text" placeholder="Nombre del jugador ${i}" value="Jugador ${i}" maxlength="20" />
+        `;
+        namesContainer.appendChild(field);
+      }
+    }
 
-    // Recoger Loot
-    loots.forEach((l, i) => {
-        if(playerGroup.position.distanceTo(l.position) < 1.5) {
-            if(keys['KeyE']) {
-                scene.remove(l);
-                loots.splice(i, 1);
-                lootCount++;
-                document.getElementById('loot').innerText = lootCount;
-            }
-        }
+    function createPlayers() {
+      const count = Math.max(1, Math.min(4, Number(playerCountInput.value || 1)));
+      players = [];
+      for (let i = 1; i <= count; i += 1) {
+        const input = document.getElementById(`player${i}`);
+        const name = input?.value.trim() || `Jugador ${i}`;
+        players.push({ name, score: 0 });
+      }
+    }
+
+    function updateLeaderboard() {
+      const sorted = [...players].sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
+      leaderboardEl.innerHTML = '';
+      sorted.forEach((player, index) => {
+        const item = document.createElement('div');
+        item.className = 'leaderboard-item';
+        item.innerHTML = `<strong>${index + 1}. ${player.name}</strong><span>${player.score} pts</span>`;
+        leaderboardEl.appendChild(item);
+      });
+    }
+
+    function showStartScreen() {
+      startScreen.style.display = 'flex';
+      gameScreen.style.display = 'none';
+      endScreen.style.display = 'none';
+      feedback.style.display = 'none';
+    }
+
+    function showGameScreen() {
+      startScreen.style.display = 'none';
+      gameScreen.style.display = 'flex';
+      endScreen.style.display = 'none';
+      updateLeaderboard();
+      renderTurn();
+    }
+
+    function getCurrentPlayer() {
+      return players[currentTurn % players.length];
+    }
+
+    function renderTurn() {
+      const currentPlayer = getCurrentPlayer();
+      const phrase = gameDeck[currentTurn];
+      currentTurnTag.textContent = `Turno de ${currentPlayer.name} (${currentTurn + 1} / ${totalTurns})`;
+      if (phrase.type === 'translation') {
+        questionText.textContent = phrase.challenge;
+      } else if (phrase.type === 'fill_blanks') {
+        questionText.innerHTML = phrase.challenge.replace(/___/g, '<span class="blank">___</span>');
+      }
+      if (phrase.type === 'translation') {
+        answerText.innerHTML = phrase.parts.join('<br>');
+      } else if (phrase.type === 'fill_blanks') {
+        answerText.innerHTML = phrase.blanks.join(', ');
+      }
+      pronunciationText.textContent = phrase.answer;
+      answerBox.classList.add('hidden');
+      answerRevealed = false;
+      revealButton.disabled = false;
+      correctButton.disabled = true;
+      incorrectButton.disabled = true;
+      nextTurnButton.disabled = true;
+      feedback.style.display = 'none';
+    }
+
+    function revealAnswer() {
+      answerBox.classList.remove('hidden');
+      answerRevealed = true;
+      revealButton.disabled = true;
+      correctButton.disabled = false;
+      incorrectButton.disabled = false;
+      feedback.style.display = 'none';
+    }
+
+    function scoreAnswer(points) {
+      if (!answerRevealed) return;
+      const playerIndex = currentTurn % players.length;
+      players[playerIndex].score += points;
+      updateLeaderboard();
+      feedback.textContent = points > 0 ? '¡Correcto! 10 puntos añadidos.' : 'Respuesta incorrecta. 0 puntos.';
+      feedback.style.display = 'block';
+      correctButton.disabled = true;
+      incorrectButton.disabled = true;
+      nextTurnButton.disabled = false;
+    }
+
+    function nextTurn() {
+      currentTurn += 1;
+      if (currentTurn >= totalTurns) {
+        showEndScreen();
+      } else {
+        renderTurn();
+      }
+    }
+
+    function showEndScreen() {
+      gameScreen.style.display = 'none';
+      endScreen.style.display = 'flex';
+      podiumEl.innerHTML = '';
+      const sorted = [...players].sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
+      const places = ['🥇 1.º lugar', '🥈 2.º lugar', '🥉 3.º lugar'];
+      for (let i = 0; i < 3; i += 1) {
+        const player = sorted[i];
+        const card = document.createElement('div');
+        card.className = 'podium-card';
+        card.innerHTML = `
+          <div class="medal">${places[i]}</div>
+          <strong>${player ? player.name : '---'}</strong>
+          <span>${player ? player.score + ' pts' : ''}</span>
+        `;
+        podiumEl.appendChild(card);
+      }
+      launchConfetti();
+    }
+
+    function launchConfetti() {
+      confetti.innerHTML = '';
+      const colors = ['#facc15', '#fb7185', '#60a5fa', '#34d399', '#a78bfa'];
+      for (let i = 0; i < 45; i += 1) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        const size = Math.random() * 14 + 10;
+        piece.style.width = `${size}px`;
+        piece.style.height = `${size}px`;
+        piece.style.left = `${Math.random() * 100}%`;
+        piece.style.top = `${-Math.random() * 220 - 20}px`;
+        piece.style.background = colors[i % colors.length];
+        piece.style.animationDuration = `${Math.random() * 1.5 + 2.5}s`;
+        piece.style.animationDelay = `${Math.random() * 1.5}s`;
+        confetti.appendChild(piece);
+      }
+    }
+
+    playerCountInput.addEventListener('change', createPlayerInputs);
+    startButton.addEventListener('click', () => {
+      createPlayers();
+      createGameDeck();
+      currentTurn = 0;
+      showGameScreen();
+    });
+    revealButton.addEventListener('click', revealAnswer);
+    correctButton.addEventListener('click', () => scoreAnswer(10));
+    incorrectButton.addEventListener('click', () => scoreAnswer(0));
+    nextTurnButton.addEventListener('click', nextTurn);
+    restartButton.addEventListener('click', () => {
+      createPlayerInputs();
+      showStartScreen();
     });
 
-    // IA Enemigos básica
-    enemies.forEach(en => {
-        en.mesh.lookAt(playerGroup.position);
-        en.mesh.translateZ(0.02);
+    document.addEventListener('keydown', (event) => {
+      if (gameScreen.style.display !== 'flex') return;
+      if (event.key.toLowerCase() === 'r' && !answerRevealed) revealAnswer();
+      if (event.key.toLowerCase() === 'c' && !correctButton.disabled) scoreAnswer(10);
+      if (event.key.toLowerCase() === 'i' && !incorrectButton.disabled) scoreAnswer(0);
+      if (event.key.toLowerCase() === 'n' && !nextTurnButton.disabled) nextTurn();
     });
 
-    // Actualizar cámara (Tercera persona)
-    const relativeCameraOffset = new THREE.Vector3(0, 3, 6);
-    const cameraOffset = relativeCameraOffset.applyMatrix4(playerGroup.matrixWorld);
-    camera.position.x = cameraOffset.x;
-    camera.position.y = cameraOffset.y;
-    camera.position.z = cameraOffset.z;
-    camera.lookAt(playerGroup.position.x, playerGroup.position.y + 1, playerGroup.position.z);
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-    update();
-    renderer.render(scene, camera);
-}
-
-animate();
-
-// Ajuste de ventana
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
-</script>
+    createPlayerInputs();
+    updateLeaderboard();
+  </script>
 </body>
 </html>
